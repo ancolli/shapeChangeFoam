@@ -1,0 +1,58 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  v2312                                 |
+|   \\  /    A nd           | Web:      www.OpenFOAM.com                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      binary;
+    class       pointVectorField;
+    arch        "LSB;label=32;scalar=64";
+    location    "0";
+    object      pointMotionU;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+dimensions      [0 1 -1 0 0 0 0];
+
+internalField   uniform (0 0 0);
+
+boundaryField
+{
+  
+    cathode 
+    {
+        name            codedGradC;
+        type    	codedFixedValue;
+        value   	$internalField;
+        #include        "codedBC.H"       
+    }
+  
+    insulator
+    {
+        type            fixedNormalSlip;
+        n               (1 0 0);
+    }
+    
+    insulator_top
+    {
+        type            fixedNormalSlip;
+        n               (0 1 0);
+    }
+
+    anode 
+    {
+        type            fixedNormalSlip;
+        n               (0 1 0);
+    }
+ 
+    "front.*"
+    {
+        type            empty;
+    }
+}
+
+// ************************************************************************* //

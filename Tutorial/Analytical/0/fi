@@ -1,0 +1,58 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  1.5                                   |
+|   \\  /    A nd           | Web:      http://www.OpenFOAM.org               |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       volScalarField;
+    object      fi;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+#include "../constant/controlProperties"
+
+dimensions      [1 2 -3 0 0 -1 0];// V = kg*m^2/(A*s^3)
+
+internalField   uniform 0;
+
+boundaryField
+{
+    "insulator.*"      
+    {
+        type            zeroGradient;
+    }
+
+    anode       
+    {   
+
+	type            codedFixedValue;
+    	value           uniform #calc "($maxPot)";
+
+    // Name of generated boundary condition
+    	name    potentialFixedValue;
+    	code
+    	#{
+        	const dictionary& Results = db().lookupObject<IOdictionary>("Results");  	
+        	const scalar Vcell = readScalar(Results.lookup("Vcell"));
+        	Info<< "Vcell: " << Vcell << endl;
+        	operator==(Vcell);
+    	#};
+    }
+
+    cathode      
+    {    
+    	type		fixedValue;
+    	value 		uniform 0;   
+    }  
+
+    "front.*"
+    {
+        type            empty;     
+    }  
+}
+
+// ************************************************************************* //
