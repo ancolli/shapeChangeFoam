@@ -77,6 +77,9 @@ int main(int argc, char *argv[])
      // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
     Info<< "\nStarting time loop\n" << endl;
+    
+    scalar mult = 0.0;
+    scalar var = 0.0;
 
     while (runTime.run())
     {      
@@ -99,6 +102,14 @@ int main(int argc, char *argv[])
         // --- Pressure-velocity PIMPLE corrector loop
         while (pimple.loop())
         {
+        	do {
+                	#include "fiEqn.H"
+                	mult = readScalar(Results.lookup("mult"));
+                	var = readScalar(Results.lookup("var"));	                	 
+                }
+                while (mag(mult) > 1e-5 || mag(var) > 1e-5);
+                
+                
             if (pimple.firstIter() || moveMeshOuterCorrectors)
             {
                 // Do any mesh changes
@@ -125,7 +136,6 @@ int main(int argc, char *argv[])
                         //#include "meshCourantNo.H"
                     }*/
                 }
-                #include "fiEqn.H"
             }
             
             

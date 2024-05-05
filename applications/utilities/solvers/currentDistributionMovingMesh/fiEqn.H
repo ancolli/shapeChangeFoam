@@ -49,9 +49,11 @@ if (patchOK==1)  // checks if "wall_anode" is in the current patchName
 	scalar Vref = fi[cellNo];
         Results.set("Vref", Vref);
 // calculate cell potential
-        scalar mult = 0.0;
+        
         scalar Vcell_old = 0.0;
         scalar var = 0.0;
+        
+        scalar mult = readScalar(Results.lookup("mult")); //scalar mult = 0.0;
         scalar Vcell = readScalar(Results.lookup("Vcell")); 
 
         scalar control = readScalar(controlProperties.lookup("control"));  
@@ -60,7 +62,9 @@ if (patchOK==1)  // checks if "wall_anode" is in the current patchName
         scalar alpha = readScalar(controlProperties.lookup("alpha"));
         scalar tol_I = readScalar(controlProperties.lookup("tol_I"));
 
-        scalar ba = readScalar(transportProperties.lookup("ba"));    
+        scalar ba = readScalar(transportProperties.lookup("ba"));   
+        
+        Vcell=(maxPot < 0.0) ? -mag(Vcell) : mag(Vcell); // 
 // potentiostatic mode
         scalar maxvar = readScalar(controlProperties.lookup("maxvar"));
         scalar tol_ref = readScalar(controlProperties.lookup("tol_ref"));
@@ -70,18 +74,25 @@ if (patchOK==1)  // checks if "wall_anode" is in the current patchName
         var=(var > 0.0) ? min(var,maxvar) : max(var,-maxvar);
       
         var=(mag(var/ref) > tol_ref) ? var : 0.0; // limito ref a x%
+        var = (control==1) ? var : ((control==2) ? 0.0 : 0.0); //
+        
 // galvanostatic   
-        mult = (mag(sumField-I)/I > tol_I) ? (sumField-I)/(I/ba) : 0.0; // limito corriente a x%	
+        mult = (mag(sumField-I)/mag(I) > tol_I) ? (sumField-I)/(I/ba) : 0.0; // limito corriente a x%	
 // overrelaxation 
         Vcell_old = Vcell;
+        
+        mult=(maxPot < 0.0) ? -mult : mult; // 
+        
 	Vcell = (control==1) ? Vcell+var : ((control==2) ? maxPot : Vcell-mult); //Vcell = Vcell-mult;//
         Vcell = Vcell_old+alpha*(Vcell-Vcell_old);
-	Vcell = max(min(Vcell, maxPot),ref); // limited potentials
+	//Vcell = max(min(Vcell, maxPot),ref); // limited potentials
         
         // writing Vcell, I and Vref  
         Results.set("Vcell", Vcell);
         Results.set("I", sumField); 
-        Results.set("Vref", (ref < 0.0) ? -Vref : (Vcell-Vref));//  
+        Results.set("Vref", (ref < 0.0) ? -Vref : (Vcell-Vref));//
+        Results.set("mult", mult);
+        Results.set("var", var); 
                
    }
    else
