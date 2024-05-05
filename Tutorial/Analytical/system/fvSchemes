@@ -17,12 +17,15 @@ FoamFile
 
 ddtSchemes
 {
-    default        Euler;
+    default        Euler;//backward;//steadyState; 
 }
 
 gradSchemes
 {
     default         leastSquares;//none;
+    //grad(cellMotionU) Gauss linear;//cellLimited;//Gauss linear;
+    //grad(fi) Gauss linear;//leastSquares;//
+
 }
 
 divSchemes
@@ -33,7 +36,7 @@ divSchemes
 laplacianSchemes
 {
     default         none;Gauss linear corrected;//
-    laplacian(diffusivity,cellMotionU) Gauss linear orthogonal;// 
+    laplacian(diffusivity,cellMotionU) Gauss linear orthogonal;// corrected faceCorrected limited linearFit orthogonal quadraticFit relaxed skewCorrected uncorrected
     laplacian(keff,fi) Gauss linear orthogonal; //
 }
 

@@ -17,19 +17,19 @@ FoamFile
 
 application     currentDistributionMovingMesh;
 
-startFrom       startTime;
+startFrom       startTime;//latestTime;//
 
 startTime       0;
 
 stopAt          endTime;
 
-endTime         13000;
+endTime         25000;//13610;//19050;//
 
 deltaT          1;
 
 writeControl    runTime;
 
-writeInterval   1000;
+writeInterval   2500;//1361;//1905;//
 
 purgeWrite      0;
 
@@ -45,5 +45,10 @@ timePrecision   6;
 
 runTimeModifiable true;
 
+
+/*libs (
+	"libgroovyBC.so"
+	"libOpenFOAM.so"
+);*/
 
 // ************************************************************************* //

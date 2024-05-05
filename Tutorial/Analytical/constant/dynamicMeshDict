@@ -15,15 +15,99 @@ FoamFile
 
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
-dynamicFvMesh dynamicMotionSolverFvMesh;
+/*dynamicFvMesh dynamicMotionSolverFvMesh;
 
+
+solver   displacementLaplacian;
+diffusivity inversePointDistance ( cathode ); //(anode cathode)*/
+
+//dynamicFvMeshLibs (fvMotionSolvers);//"dynamicMotionRefineFvMesh.so"
+
+dynamicFvMesh dynamicMotionSolverFvMesh;
+//dynamicFvMesh dynamicRefineMotionFvMesh;//
+//dynamicFvMesh	dynamicRefineFvMesh;
+
+//motionSolverLibs ("libfvMotionSolvers.so");
 dynamicFvMeshLibs
 (
     fvMotionSolvers
 );
 
-solver      velocityLaplacian;
+//solver   displacementLaplacian;
+//diffusivity inversePointDistance ( cathode );
 
-diffusivity uniform;
+
+/*solver 	displacementSBRStress;
+
+displacementSBRStressCoeffs
+{
+    // diffusivity  	uniform 1e12 (cathode bottom top);
+    //diffusivity  	directional (10 10 0);
+    //diffusivity  	motionDirectional (1 1 0); velocitymotionsolver
+
+    // diffusivity  	quadratic inversePointDistance (cathode);
+     //diffusivity	inverseFaceDistance (cathode);
+     //diffusivity	quadratic inverseVolume (cathode bottom);
+     //diffusivity	exponential 0.01 inverseDistance (cathode bottom); //quadratic
+    //  file    
+}*/
+
+
+solver      velocityLaplacian;//displacementLaplacian;
+
+
+
+//displacementLaplacianCoeffs {//displacementLaplacianCoeffs
+
+diffusivity uniform;//inversePointDistance (cathode); //;//inversePointDistance (anode);////inversePointDistance (top);//exponential 1e-3  (cathode); //quadratic inverseVolume (cathode);// uniform;/ /inversePointDistance (cathode);// 
+//(directional exponential file inverseDistance inverseFaceDistance inversePointDistance inverseVolume motionDirectional quadratic uniform)
+//directional (1 1 0); //directional (10 10 0);//
+//}
+
+
+
+
+/*dynamicRefineMotionFvMeshCoeffs//dynamicMotionRefineFvMeshCoeffs //
+//dynamicRefineFvMeshCoeffs
+{
+    // How often to refine
+    refineInterval  2;
+
+    // Field to be refinement on
+    field           velocityGradientMag;//conGradientMag;//
+
+    // Refine field inbetween lower..upper
+    lowerRefineLevel 4e-4;//30;
+    upperRefineLevel 1e-2;//1e5;//1e6;
+
+    // If value < unrefineLevel unrefine
+    unrefineLevel   0.001;//10;
+
+    // Have slower than 2:1 refinement
+    nBufferLayers   1;
+
+    // Refine cells only up to maxRefinement levels
+    maxRefinement   3;//2;
+
+    // Stop refinement if maxCells reached
+    maxCells        200000;//4000000;
+
+    // Flux field and corresponding velocity field. Fluxes on changed
+    // faces get recalculated by interpolating the velocity. Use 'none'
+    // on surfaceScalarFields that do not need to be reinterpolated.
+    correctFluxes
+    (
+        ( phi U )
+        (phi none)
+        (U none)
+        (C none)
+        //(nHatf none)
+        //(rhoPhi none)
+        //(ghf none)
+    );
+
+    // Write the refinement level as a volScalarField
+    dumpLevel       true;
+}*/
 
 // ************************************************************************* //

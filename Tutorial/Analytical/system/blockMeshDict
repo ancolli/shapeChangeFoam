@@ -68,7 +68,7 @@ boundary
     
 
     
-    anode
+    wall_anode
     {
         type        wall;
         faces
@@ -77,7 +77,7 @@ boundary
         );
     }
  
-    cathode
+    wall_cathode
     {
         type        wall;//patch;//
         faces

@@ -136,29 +136,7 @@ int main(int argc, char *argv[])
                         //#include "meshCourantNo.H"
                     }*/
                 }
-            }
-            
-            
-            
-            /*solve
-            (
-                - fvm::laplacian(kf, fi)
-            );*/
-
-            //#include "UEqn.H"           
-            //#include "CEqn.H"
-
-            // --- Pressure corrector loop
-            /*while (pimple.correct())
-            {
-                #include "pEqn.H"
-            }
-
-            if (pimple.turbCorr())
-            {
-                laminarTransport.correct();
-                turbulence->correct();
-            }*/
+            }          
         }
         
         runTime.write();

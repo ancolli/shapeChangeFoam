@@ -1,13 +1,54 @@
 #!/bin/sh
 cd ${0%/*} || exit 1    # run from this directory
 
+#ln constant/controlProperties system/include/controlProperties
+
+
+
 # Source tutorial run functions
 . $WM_PROJECT_DIR/bin/tools/RunFunctions
 
+#setcontrolDict()
+#{
+#	value=$(sed -En 's/Tf[[:blank:]]+//p' constant/controlProperties | sed 's/;.*//') 
+#	sed -E '/endTime/s/[^[:blank:]]+$/'"$value;"/ -i system/controlDict
+#	sed -E '/stopAt/s/[^[:blank:]]+$/'"endTime;"/ -i system/controlDict
+#}
+
+
 runApplication blockMesh
 
+#Set dictionaries
+#setcontrolDict
+
+#runApplication setFields
+
+#-- Run on single processor
 runApplication `getApplication`
 
 runApplication postProcess -func totalCurrentDensity -noZero #-latestTime
+
+## Decompose
+#for i in bottomAir topAir heater leftSolid rightSolid
+#do
+#   decomposePar -region $i > log.decomposePar.$i 2>&1
+#done
+#
+## Run
+#runParallel `getApplication` 4
+#
+## Reconstruct
+#for i in bottomAir topAir heater leftSolid rightSolid
+#do
+#   reconstructPar -region $i > log.reconstructPar.$i 2>&1
+#done
+
+
+
+#echo "    postProcess -func 'grad(U)'"
+#echo
+#echo "creating files for paraview post-processing"
+#echo
+#paraFoam #-touchAll
 
 # ----------------------------------------------------------------- end-of-file

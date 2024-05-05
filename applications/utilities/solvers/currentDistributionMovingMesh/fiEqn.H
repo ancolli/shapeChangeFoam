@@ -10,7 +10,7 @@ Info<< "Min/max fi:" << min(fi).value() << ' '
     << max(fi).value() << endl;
 
 //check if wall_anode exist
-string patchNameNeeded = "anode";
+string patchNameNeeded = "wall_anode";
 scalar patchOK = 0;
 
     forAll(mesh.boundaryMesh(), p_ith)
@@ -26,7 +26,7 @@ if (patchOK==1)  // checks if "wall_anode" is in the current patchName
       {
 // if wall_anode exists then: Calculates flux on the anode
 
-        label patchi = mesh.boundaryMesh().findPatchID("anode");   
+        label patchi = mesh.boundaryMesh().findPatchID("wall_anode");   
         Flux.boundaryFieldRef()[patchi] = keff.boundaryFieldRef()[patchi]*fi.boundaryFieldRef()[patchi].snGrad();
 			    
 // Calculates average Flux

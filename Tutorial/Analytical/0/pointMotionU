@@ -23,7 +23,7 @@ internalField   uniform (0 0 0);
 boundaryField
 {
   
-    cathode 
+    wall_cathode 
     {
         name            codedGradC;
         type    	codedFixedValue;
@@ -43,7 +43,7 @@ boundaryField
         n               (0 1 0);
     }
 
-    anode 
+    wall_anode 
     {
         type            fixedNormalSlip;
         n               (0 1 0);

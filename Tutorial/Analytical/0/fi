@@ -26,27 +26,82 @@ boundaryField
         type            zeroGradient;
     }
 
-    anode       
+    wall_anode       
     {   
-
+	//type		fixedValue;
+	//value 		uniform #calc "($Vcell)";//1;
 	type            codedFixedValue;
     	value           uniform #calc "($maxPot)";
 
     // Name of generated boundary condition
     	name    potentialFixedValue;
+
     	code
     	#{
-        	const dictionary& Results = db().lookupObject<IOdictionary>("Results");  	
+        	//const dictionary& kineticProperties = db().lookupObject<IOdictionary>("transportProperties");
+        	const dictionary& Results = db().lookupObject<IOdictionary>("Results");
+        	
         	const scalar Vcell = readScalar(Results.lookup("Vcell"));
+ 		//const dictionary& controlProperties = db().lookupObject<IOdictionary>("controlProperties");
+		//scalar maxPot = readScalar(controlProperties.lookup("maxPot"));
+		//scalar ref = readScalar(controlProperties.lookup("ref"));
+		//Vcell = max(min(Vcell, maxPot),ref); // limited potentials
         	Info<< "Vcell: " << Vcell << endl;
         	operator==(Vcell);
     	#};
     }
 
-    cathode      
-    {    
-    	type		fixedValue;
-    	value 		uniform 0;   
+    wall_cathode      
+    {
+    
+    type		fixedValue;
+    value 		uniform 0;
+    /*type            codedMixed;
+    
+    refValue        uniform 0;//uniform #calc "(mag($ref))";//$internalField;//
+    refGradient     uniform 0;
+    valueFraction   uniform 1;
+
+    name    cathode_fi;   // name of generated BC
+
+    code
+    #{
+        const fvPatch& p = this->patch();                                                                          // Actual boundary/patch
+    	label patchID = p.patch().boundaryMesh().findPatchID("cathode");                                       // Desired patch ID
+        const fvMesh& mesh = patch().boundaryMesh().mesh();
+
+        //const volScalarField& kf_ = this->db().objectRegistry::template lookupObject<volScalarField>("keff");   // Desired field 1
+        const volScalarField& fi_ = this->db().objectRegistry::template lookupObject<volScalarField>("fi"); // Desired field 2
+        scalarField fi_boundary = fi_.boundaryField()[patchID];
+        
+        //scalarField kf_boundary = kf_.boundaryField()[patchID];
+        const dictionary& transProp = db().lookupObject<IOdictionary>("transportProperties");                                               
+        const dimensionedScalar kf_boundary(transProp.lookup("kf"));                                            
+                                        
+        scalarField delta = 1.0/mesh.deltaCoeffs().boundaryField()[patchID]; 
+
+        //const dictionary& kineticProperties = db().lookupObject<IOdictionary>("transportProperties");
+  
+        scalar j0_SS316 = 631.228164481526;//6.43852727771156; // A/m2 //readScalar(kineticProperties.lookup("j0_SS316"));
+        scalar R = 8.314546;// V //readScalar(kineticProperties.lookup("bc_SS316"));
+        scalar T = 293;
+        scalar n = 2;
+        scalar F = 96485;
+        scalar alfa = 1.0;
+	//scalar ba_SS316 = 0.025249126579261;// V //readScalar(kineticProperties.lookup("ba_SS316"));
+		
+        scalarField jota1 = -j0_SS316*alfa*n*F/R/T*fi_boundary;   //-j0_SS316*exp((-fi_boundary)/bc_SS316);                                                        
+        //scalarField jota2 = j0_SS316*exp((-fi_boundary)/ba_SS316);
+        scalarField k0 = kf_boundary.value()/delta;                                                                      
+        
+	scalarField A = (1/k0)*(j0_SS316*alfa*n*F/R/T);       
+	scalarField B = (1/k0)*(jota1+fi_boundary*j0_SS316*alfa*n*F/R/T); 
+        
+	this->refValue() = B/A;
+        this->refGrad() = 0;
+        this->valueFraction() = A/(A+1); 
+    #};*/
+   
     }  
 
     "front.*"
