@@ -4,7 +4,7 @@ Cite as: A.N. Colli ... 24
 DOI: 
 
 # Disclaimer
-This offering is not approved or endorsed by OpeFOAM Foundation, producer and distributor of the OpenFOAM software via www.openfoam.org.
+This offering is not approved or endorsed by ESI® Group, ESI-OpenCFD® or the OpenFOAM® Foundation, the producer of the OpenFOAM® software and owner of the OpenFOAM® trademark.
 
 # shapeChangeFoam
 OpenFOAM Repository for Simulating Moving Boundary Conditions in Metal Electrodeposition and Dissolution in Electrochemical Systems
