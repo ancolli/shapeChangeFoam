@@ -1,7 +1,8 @@
 # v1.0.0
 
-Cite as: A.N. Colli ... 24  
-DOI: 
+Cite as: A. N. Colli et al. J. Electrochem. Soc. 171 (2024) 073501  
+DOI: 10.1149/1945-7111/ad5b1f
+https://iopscience.iop.org/article/10.1149/1945-7111/ad5b1f/meta
 
 # Disclaimer
 This offering is not approved or endorsed by ESI® Group, ESI-OpenCFD® or the OpenFOAM® Foundation, the producer of the OpenFOAM® software and owner of the OpenFOAM® trademark.
